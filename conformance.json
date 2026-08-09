@@ -1,15 +1,22 @@
 {
+  "capabilities": [
+    "record-schema",
+    "api-manifest",
+    "context-isolation",
+    "otel-explicit",
+    "no-monkey-patching",
+    "supabase-client",
+    "lifecycle",
+    "browser-exit"
+  ],
   "language": "browser",
-  "matrixVersion": "ores.otel.test-repository/v1",
   "name": "ores-otel-log-browser-test",
-  "requireExactHeadChecks": true,
-  "requireNoMonkeyPatching": true,
   "runtime": "Chromium and workerd",
   "sources": [
     "ores-otel/ores.otel.log",
     "ORESoftware/next-loggers.ts"
   ],
-  "status": "seeded",
+  "status": "planned",
   "testCommand": "npm ci && npm run test:browser && npm run test:workerd",
   "toolchain": "Playwright and workerd"
 }
