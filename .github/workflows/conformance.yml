@@ -68,8 +68,10 @@ jobs:
           npx wrangler dev --config wrangler.conformance.toml --local --port 8787 >"${RUNNER_TEMP}/workerd.log" 2>&1 &
           worker_pid=$!
           trap 'kill "${worker_pid}" 2>/dev/null || true' EXIT
+          ready=false
           for attempt in $(seq 1 60); do
             if curl --fail --silent --output /dev/null http://127.0.0.1:8787/; then
+              ready=true
               break
             fi
             if ! kill -0 "${worker_pid}" 2>/dev/null; then
@@ -78,12 +80,9 @@ jobs:
             fi
             sleep 2
           done
-          body="$(curl --silent --show-error --write-out '
-%{http_code}' http://127.0.0.1:8787/)"
-          status="$(printf '%s' "${body}" | tail -n1)"
-          printf '%s
-' "${body}" | sed '$d'
+          test "${ready}" = "true"
+          status="$(curl --silent --show-error --output "${RUNNER_TEMP}/workerd-response.txt" --write-out '%{http_code}' http://127.0.0.1:8787/)"
+          cat "${RUNNER_TEMP}/workerd-response.txt"
           test "${status}" = "200"
       - name: Record exact source
-        run: printf '%s %s %s %s
-' ores-otel-log-browser-test browser "${{ matrix.role }}" "${{ matrix.ref }}"
+        run: echo ores-otel-log-browser-test browser "${{ matrix.role }}" "${{ matrix.ref }}"
