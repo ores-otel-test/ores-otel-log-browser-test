@@ -1,7 +1,6 @@
 # ores-otel-log-browser-test
 
-Exact-head **browser** conformance harness for `ores-otel/ores.otel.log` and `ORESoftware/next-loggers.ts`.
+Exact-head conformance harness for **browser**.
 
-Native verification command: `npm ci && npm run test:browser && npm run test:workerd`.
-
-Promotion requires both sources to pass at explicit 40-character commit SHAs.
+This repository tests both `ores-otel/ores.otel.log` and `ORESoftware/next-loggers.ts` using explicit commit SHAs.
+The required native command is recorded in `conformance.json`: `npm ci && npm run test:browser && npm run test:workerd`.
