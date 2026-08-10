@@ -1,27 +1,15 @@
 {
-  "automatic_instrumentation": false,
-  "capabilities": [
-    "record-schema",
-    "api-manifest",
-    "context-isolation",
-    "otel-explicit",
-    "no-monkey-patching",
-    "supabase-client",
-    "lifecycle",
-    "browser-exit"
-  ],
-  "exact_heads": {
-    "canonical": "be37556eeeaa77c2fc57feda96239b69cca8e9ac",
-    "legacy": "be37556eeeaa77c2fc57feda96239b69cca8e9ac"
-  },
   "language": "browser",
-  "no_monkey_patching": true,
-  "repository": "ores-otel-test/ores-otel-log-browser-test",
-  "runtime": "Browser and workerd",
-  "schema_version": 1,
+  "matrixVersion": "ores.otel.test-repository/v1",
+  "name": "ores-otel-log-browser-test",
+  "requireExactHeadChecks": true,
+  "requireNoMonkeyPatching": true,
+  "runtime": "Chromium and workerd",
   "sources": [
     "ores-otel/ores.otel.log",
     "ORESoftware/next-loggers.ts"
   ],
-  "test_command": "npm ci && npm run test:runtimes"
+  "status": "seeded",
+  "testCommand": "npm ci && npm run test:browser && npm run test:workerd",
+  "toolchain": "Playwright and workerd"
 }
