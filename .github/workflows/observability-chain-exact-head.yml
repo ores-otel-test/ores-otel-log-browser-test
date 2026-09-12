@@ -1,0 +1,40 @@
+name: Exact-head browser observability consumer
+
+on:
+  pull_request:
+    paths:
+      - 'harness/observability-chain-browser.mjs'
+      - '.github/workflows/observability-chain-exact-head.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  browser-consumer:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    env:
+      NEXT_LOGGERS_SHA: 9bf94e8a183612d3c1f703735a4cd3819594344a
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - run: npm ci
+      - name: Fetch exact next-loggers source
+        shell: bash
+        run: |
+          set -euo pipefail
+          git init source
+          git -C source remote add origin https://github.com/ORESoftware/next-loggers.ts.git
+          git -C source fetch --no-tags --depth=1 origin "$NEXT_LOGGERS_SHA"
+          test "$(git -C source rev-parse FETCH_HEAD)" = "$NEXT_LOGGERS_SHA"
+          git -C source checkout --detach "$NEXT_LOGGERS_SHA"
+      - name: Build exact source
+        working-directory: source
+        run: npm ci && npm run build
+      - name: Run browser consumer contract
+        env:
+          NEXT_LOGGERS_SOURCE: ${{ github.workspace }}/source
+        run: node --test harness/observability-chain-browser.mjs
